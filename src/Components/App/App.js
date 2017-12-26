@@ -4,7 +4,8 @@ import './App.css'
 import Searchbar from '../Searchbar/Searchbar.js'
 import SearchResults from '../SearchResults/SearchResults';
 import Playlist from '../Playlist/Playlist';
-import Spotify from '../../util/Spotify.js'
+import MusicService from '../../util/MusicService.js'
+
 
 class App extends React.Component {
   constructor(props){
@@ -12,26 +13,23 @@ class App extends React.Component {
     this.state = {
       searchResults: [],
       playlistTracks :[],
-      playlistName: "New Playlist"    
+      playlistName: "New Playlist",    
     };
     this.addTrack = this.addTrack.bind(this);
     this.removeTrack = this.removeTrack.bind(this);
     this.updatePlaylistName = this.updatePlaylistName.bind(this);
     this.savePlaylist = this.savePlaylist.bind(this);
     this.search = this.search.bind(this);
-    Spotify.getAccessToken(); //Ensure that spotify token will be generated at start-up of app. Otherwise, the first search result might be deleted.
+    this.musicService = new MusicService('Spotify');
   }
 
-  search(searchTerm){    
-    if(Spotify.getAccessToken()){
-      Spotify.search(searchTerm).then(results=>{
-        this.setState(
-          {
-            searchResults: results
-          })
+  search(searchTerm){
+    this.musicService.search(searchTerm).then(results=>{
+      this.setState(
+        {
+          searchResults: results
         });
-    }    
-
+      });
   }
 
   updatePlaylistName(playlistName){
@@ -52,7 +50,7 @@ class App extends React.Component {
   }
 
   savePlaylist(){
-    Spotify.savePlaylist(this.state.playlistName,this.state.playlistTracks.map(track=>track.uri)).then(()=>{
+    this.musicService.savePlaylist(this.state.playlistName,this.state.playlistTracks).then(()=>{
       this.setState({
         playlistName: 'New Playlist',
         playlistTracks: []
