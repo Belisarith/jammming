@@ -1,11 +1,16 @@
+import {redirectUri} from './Constants.js'
+
+
 let accessToken = '';
 let expiresIn;
 
 const Spotify = {
+        init(){
+        this.getAccessToken();
+  ***REMOVED***,
     
     getAccessToken(){
-        let clientId = "3736c7f452654b798ce2275f6df30cfa"
-        let redirectUri = window.location.href;
+        let clientId = "3736c7f452654b798ce2275f6df30cfa"        
         let url = `https://accounts.spotify.com/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=token&scope=playlist-modify-public`;   
 
         if(accessToken) return true;    
@@ -108,8 +113,5 @@ const Spotify = {
       
   ***REMOVED***
 }
-
-
-
 
 export default Spotify;
