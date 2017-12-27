@@ -3,14 +3,15 @@ import fetchJsonp from "fetch-jsonp";
 
 let accessToken = "";
 let expiresIn;
+let appId = "265642";
+let userId = "";
 
 const Deezer = {
 ***REMOVED***
-    this.getAccessToken();
+    Deezer.getAccessToken();
 ***REMOVED***,
 
   getAccessToken() {
-    let appId = "265642";
     let url = `https://connect.deezer.com/oauth/auth.php?app_id=${appId}&redirect_uri=${redirectUri}&perms=manage_library&response_type=token`;
 
     if (accessToken) return true;
@@ -51,38 +52,50 @@ const Deezer = {
 ***REMOVED***,
 
   savePlaylist(playlistName, trackId) {
-    let userId = "";
+    if (!(playlistName && trackId.length > 0)) return;
     let playlistId = "";
-    let url =
-      "https://api.deezer.com/user/me&output=jsonp&access_token=" + accessToken;
-    return fetchJsonp(url)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-  ***REMOVED***
-        throw new Error("Failure accessing userid deezer");
-***REMOVED***)
-      .then(respJson => {
-        userId = respJson.id;
-        url = `https://api.deezer.com/user/${userId}/playlists/&output=jsonp&request_method=post&access_token=${accessToken}&title=${playlistName}`;
-        fetchJsonp(url)
-          .then(response => {
+
+    let url;
+    return Deezer.getUserId().then(() => {
+      url = `https://api.deezer.com/user/${userId}/playlists/&output=jsonp&request_method=post&access_token=${accessToken}&title=${playlistName}`;
+      fetchJsonp(url)
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+    ***REMOVED***
+          throw new Error("Failure creating playlist deezer");
+  ***REMOVED***)
+        .then(respJson => {
+          playlistId = respJson.id;
+          url = `http://api.deezer.com/playlist/${playlistId}/tracks/&output=jsonp&access_token=${accessToken}&songs=${trackId.join()}&request_method=post`;
+          fetchJsonp(url).then(response => {
             if (response.ok) {
               return response.json();
       ***REMOVED***
-            throw new Error("Failure creating playlist deezer");
-    ***REMOVED***)
-          .then(respJson => {
-            playlistId = respJson.id;
-            url = `http://api.deezer.com/playlist/${playlistId}/tracks/&output=jsonp&access_token=${accessToken}&songs=${trackId.join()}&request_method=post`;
-            fetchJsonp(url).then(response => {
-              if (response.ok) {
-                return response.json();
-        ***REMOVED***
-              throw new Error("Failure adding songs deezer");
-      ***REMOVED***);
+            throw new Error("Failure adding songs deezer");
     ***REMOVED***);
-***REMOVED***);
+  ***REMOVED***);
+  ***REMOVED***);
+***REMOVED***,
+
+  getUserId() {
+    let url =
+      "https://api.deezer.com/user/me&output=jsonp&access_token=" + accessToken;
+
+    if (!userId) {
+      return fetchJsonp(url)
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+    ***REMOVED***
+          throw new Error("Failure accessing userid deezer");
+  ***REMOVED***)
+        .then(respJson => {
+          userId = respJson.id;
+  ***REMOVED***);
+  ***REMOVED*** else {
+      return Promise.resolve("Success");
+  ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 

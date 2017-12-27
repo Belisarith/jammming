@@ -19,7 +19,7 @@ class App extends React.Component {
     this.updatePlaylistName = this.updatePlaylistName.bind(this);
     this.savePlaylist = this.savePlaylist.bind(this);
     this.search = this.search.bind(this);
-    this.musicService = new MusicService("Deezer");
+    this.musicService = new MusicService("Spotify");
 ***REMOVED***
 
   search(searchTerm) {
