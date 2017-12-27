@@ -96,6 +96,10 @@ const Deezer = {
   ***REMOVED*** else {
       return Promise.resolve("Success");
   ***REMOVED***
+***REMOVED***,
+
+  getPlaylists() {
+    //Implement
 ***REMOVED***
 ***REMOVED***
 

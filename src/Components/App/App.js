@@ -23,6 +23,11 @@ class App extends React.Component {
 ***REMOVED***
 
   search(searchTerm) {
+    this.musicService.getPlaylists().then(playlists => {
+      this.musicService
+        .getPlaylistTracks(playlists[5].identifier)
+        .then(result => result);
+  ***REMOVED***);
     this.musicService.search(searchTerm).then(results => {
       this.setState({
         searchResults: results
