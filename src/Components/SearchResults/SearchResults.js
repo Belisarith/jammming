@@ -1,6 +1,7 @@
 import React from "react";
 import "./SearchResults.css";
 import Tracklist from "../Tracklist/Tracklist.js";
+import PropTypes from "prop-types";
 
 class SearchResults extends React.Component {
   render() {
@@ -16,5 +17,11 @@ class SearchResults extends React.Component {
     );
   }
 }
+
+SearchResults.propTypes = {
+  trackInfos: PropTypes.array,
+  isRemoval: PropTypes.bool,
+  onAdd: PropTypes.func
+};
 
 export default SearchResults;

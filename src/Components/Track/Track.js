@@ -1,5 +1,6 @@
 import React from "react";
 import "./Track.css";
+import PropTypes from "prop-types";
 
 class Track extends React.Component {
   constructor(props) {
@@ -34,7 +35,7 @@ class Track extends React.Component {
         <div className="Track-information">
           <h3>{this.props.trackInfo.name}</h3>
           <p>
-            {this.props.trackInfo.artist}s | {this.props.trackInfo.album}
+            {this.props.trackInfo.artist} | {this.props.trackInfo.album}
           </p>
         </div>
         {this.renderAction()}
@@ -42,5 +43,12 @@ class Track extends React.Component {
     );
   }
 }
+
+Track.propTypes = {
+  isRemoval: PropTypes.bool,
+  onAdd: PropTypes.func,
+  trackInfo: PropTypes.object,
+  onRemove: PropTypes.func
+};
 
 export default Track;
