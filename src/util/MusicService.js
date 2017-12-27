@@ -7,10 +7,14 @@ class MusicService {
     switch (serviceName) {
       case "Deezer":
         this.search = Deezer.search;
+        this.getPlaylists = Deezer.getPlaylists;
+        this.getPlaylistTracks = Deezer.getPlaylistTracks;
         Deezer.init();
         break;
       default:
         this.search = Spotify.search;
+        this.getPlaylists = Spotify.getPlaylists;
+        this.getPlaylistTracks = Spotify.getPlaylistTracks;
         Spotify.init();
     }
   }

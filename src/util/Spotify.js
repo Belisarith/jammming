@@ -109,6 +109,57 @@ const Spotify = {
     } else {
       return Promise.resolve("Success");
     }
+  },
+
+  getPlaylists() {
+    return Spotify.getUserId().then(() => {
+      let url = `https://api.spotify.com/v1/users/${userId}/playlists`;
+      return fetch(url, {
+        method: "GET",
+        headers: { Authorization: "Bearer " + accessToken }
+      })
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          }
+          throw new Error("Failure retrieving Spotify playlists"); //TODO: What good are uncaught exceptions???
+        })
+        .then(respJson => {
+          return respJson.items.map(playList => {
+            return {
+              identifier: playList.id,
+              name: playList.name
+            };
+          });
+        });
+    });
+  },
+
+  getPlaylistTracks(playlistId) {
+    return Spotify.getUserId().then(() => {
+      let url = `https://api.spotify.com/v1/users/${userId}/playlists/${playlistId}/tracks`;
+      return fetch(url, {
+        method: "GET",
+        headers: { Authorization: "Bearer " + accessToken }
+      })
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          }
+          throw new Error("Failure retrieving songs from Spotify playlist"); //TODO: What good are uncaught exceptions???
+        })
+        .then(respJson => {
+          return respJson.items.map(element => {
+            return {
+              id: element.track.id,
+              name: element.track.name,
+              artist: element.track.artists[0].name,
+              album: element.track.album.name,
+              uri: element.track.uri
+            };
+          });
+        });
+    });
   }
 };
 

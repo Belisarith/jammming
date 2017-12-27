@@ -96,6 +96,10 @@ const Deezer = {
     } else {
       return Promise.resolve("Success");
     }
+  },
+
+  getPlaylists() {
+    //Implement
   }
 };
 
