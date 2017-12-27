@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "deezer-node-api": "^0.2.2",
     "fetch-jsonp": "^1.1.3",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
