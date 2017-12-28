@@ -99,7 +99,48 @@ const Deezer = {
 ***REMOVED***,
 
   getPlaylists() {
-    //Implement
+    return Deezer.getUserId().then(() => {
+      let url = `https://api.deezer.com/user/${userId}/playlists/&output=jsonp&access_token=${accessToken}`;
+      return fetchJsonp(url)
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+    ***REMOVED***
+          throw new Error("Failure accessing playlists in deezer");
+  ***REMOVED***)
+        .then(respJson => {
+          return respJson.data.map(element => {
+            return {
+              identifier: element.id,
+              name: element.title
+      ***REMOVED***;
+    ***REMOVED***);
+  ***REMOVED***);
+  ***REMOVED***);
+***REMOVED***,
+
+  getPlaylistTracks(playlistId) {
+    return Deezer.getUserId().then(() => {
+      let url = `https://api.deezer.com/playlist/${playlistId}/tracks&output=jsonp&access_token=${accessToken}`;
+      return fetchJsonp(url)
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+    ***REMOVED***
+          throw new Error("Failure accessing playlist tracks in deezer");
+  ***REMOVED***)
+        .then(respJson => {
+          return respJson.data.map(element => {
+            return {
+              id: element.id,
+              name: element.title,
+              artist: element.artist.name,
+              album: element.album.title,
+              uri: element.link
+      ***REMOVED***;
+    ***REMOVED***);
+  ***REMOVED***);
+  ***REMOVED***);
 ***REMOVED***
 ***REMOVED***
 

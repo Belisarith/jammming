@@ -150,7 +150,6 @@ const Spotify = {
   ***REMOVED***)
         .then(respJson => {
           return respJson.items.map(element => {
-            console.log(element);
             return {
               id: element.track.id,
               name: element.track.name,
