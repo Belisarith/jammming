@@ -9,13 +9,15 @@ class MusicService {
         this.search = Deezer.search;
         this.getPlaylists = Deezer.getPlaylists;
         this.getPlaylistTracks = Deezer.getPlaylistTracks;
-        Deezer.init();
+        this.init = Deezer.init;
+        this.refinedSearch = Deezer.refinedSearch;
         break;
       default:
         this.search = Spotify.search;
         this.getPlaylists = Spotify.getPlaylists;
         this.getPlaylistTracks = Spotify.getPlaylistTracks;
-        Spotify.init();
+        this.init = Spotify.init;
+        this.refinedSearch = Spotify.refinedSearch;
   ***REMOVED***
 ***REMOVED***
 
