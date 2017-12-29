@@ -1,1 +1,1 @@
-export const redirectUri = "http://localhost:3000";
+export const redirectUri = "http://localhost:3000/";

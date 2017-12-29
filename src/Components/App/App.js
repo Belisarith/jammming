@@ -5,6 +5,9 @@ import Searchbar from "../Searchbar/Searchbar.js";
 import SearchResults from "../SearchResults/SearchResults";
 import Playlist from "../Playlist/Playlist";
 import MusicService from "../../util/MusicService.js";
+import PlaylistConverter from "../../util/PlaylistConverter.js";
+
+//import GoogleMusic from "../../util/GoogleMusic.js";
 
 class App extends React.Component {
   constructor(props) {
@@ -19,15 +22,33 @@ class App extends React.Component {
     this.updatePlaylistName = this.updatePlaylistName.bind(this);
     this.savePlaylist = this.savePlaylist.bind(this);
     this.search = this.search.bind(this);
-    this.musicService = new MusicService("Deezer");
+    this.musicService = new MusicService("Spotify");
+    this.destService = new MusicService("Deezer");
+    this.musicService.init().then(response => {
+      if (response === "Successful") this.destService.init();
+    });
   }
 
   search(searchTerm) {
-    /*this.musicService.getPlaylists().then(playlists => {
+    //GoogleMusic.init();
+    this.musicService.getPlaylists().then(playlists => {
+      console.log(playlists);
+
       this.musicService
         .getPlaylistTracks(playlists[5].identifier)
-        .then(result => result);
-    });*/
+        .then(playListTracks => {
+          console.log(playlists[5].name);
+          console.log(playListTracks);
+
+          PlaylistConverter.convertPlaylist(
+            playListTracks,
+            this.destService
+          ).then(matchedPlaylistTracks => {
+            console.log(matchedPlaylistTracks);
+            this.destService.savePlaylist("NeuesDing2", matchedPlaylistTracks);
+          });
+        });
+    });
     this.musicService.search(searchTerm).then(results => {
       this.setState({
         searchResults: results
