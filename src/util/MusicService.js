@@ -18,8 +18,8 @@ class MusicService {
         this.getPlaylistTracks = Spotify.getPlaylistTracks;
         this.init = Spotify.init;
         this.refinedSearch = Spotify.refinedSearch;
-  ***REMOVED***
-***REMOVED***
+    }
+  }
 
   savePlaylist(playlistName, tracks) {
     switch (this.serviceName) {
@@ -30,8 +30,8 @@ class MusicService {
           playlistName,
           tracks.map(track => track.uri)
         );
-  ***REMOVED***
-***REMOVED***
+    }
+  }
 }
 
 export default MusicService;

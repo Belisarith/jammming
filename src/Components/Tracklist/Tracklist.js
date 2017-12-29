@@ -17,7 +17,7 @@ class Tracklist extends React.Component {
         ))}
       </div>
     );
-***REMOVED***
+  }
 }
 
 export default Tracklist;

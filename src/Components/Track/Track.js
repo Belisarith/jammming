@@ -7,7 +7,7 @@ class Track extends React.Component {
     super(props);
     this.addTrack = this.addTrack.bind(this);
     this.removeTrack = this.removeTrack.bind(this);
-***REMOVED***
+  }
 
   renderAction() {
     return this.props.isRemoval ? (
@@ -19,15 +19,15 @@ class Track extends React.Component {
         +
       </a>
     );
-***REMOVED***
+  }
 
   addTrack() {
     this.props.onAdd(this.props.trackInfo);
-***REMOVED***
+  }
 
   removeTrack() {
     this.props.onRemove(this.props.trackInfo);
-***REMOVED***
+  }
 
   render() {
     return (
@@ -41,7 +41,7 @@ class Track extends React.Component {
         {this.renderAction()}
       </div>
     );
-***REMOVED***
+  }
 }
 
 Track.propTypes = {
@@ -49,6 +49,6 @@ Track.propTypes = {
   onAdd: PropTypes.func,
   trackInfo: PropTypes.object,
   onRemove: PropTypes.func
-***REMOVED***
+};
 
 export default Track;

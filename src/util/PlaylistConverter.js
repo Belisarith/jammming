@@ -27,7 +27,7 @@ const PlaylistConverter = {
                     track.artist
                 );
                 return undefined;
-        ***REMOVED***
+              }
 
               let trackResult = searchTracks.find(searchTrack => {
                 try {
@@ -35,7 +35,7 @@ const PlaylistConverter = {
                     fzSetName.get(searchTrack.name)[0][0] > 0.7 &&
                     fzSetArtist.get(searchTrack.artist)[0][0] > 0.7
                   );
-          ***REMOVED*** catch (err) {
+                } catch (err) {
                   console.log(
                     i +
                       ": Failure for track:" +
@@ -44,18 +44,18 @@ const PlaylistConverter = {
                       track.artist
                   );
                   return undefined;
-          ***REMOVED***
-        ***REMOVED***);
+                }
+              });
               console.log(
                 i + ": Success for track:" + track.name + " of: " + track.artist
               );
               matchList = matchList.concat(trackResult);
-      ***REMOVED***);
-    ***REMOVED***),
+            });
+          }),
         Promise.resolve()
       )
       .then(() => matchList.filter(element => element !== undefined));
-***REMOVED***
-***REMOVED***
+  }
+};
 
 export default PlaylistConverter;

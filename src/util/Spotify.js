@@ -5,15 +5,15 @@ let userId = "";
 let clientId = "3736c7f452654b798ce2275f6df30cfa";
 
 const Spotify = {
-***REMOVED***
+  init() {
     return Spotify.getAccessToken();
-***REMOVED***,
+  },
 
   getAccessToken() {
     if (sessionStorage.getItem("SpotifyToken")) {
       accessToken = sessionStorage.getItem("SpotifyToken");
       return Promise.resolve("Successful");
-  ***REMOVED***
+    }
 
     let url = `https://accounts.spotify.com/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=token&scope=playlist-modify-private playlist-read-private`;
 
@@ -27,12 +27,12 @@ const Spotify = {
       window.setTimeout(() => {
         sessionStorage.setItem("SpotifyToken", "");
         accessToken = "";
-***REMOVED***, expiresIn * 1000);
+      }, expiresIn * 1000);
       window.location.replace(redirectUri);
-  ***REMOVED*** else {
+    } else {
       window.location.replace(url);
-  ***REMOVED***
-***REMOVED***,
+    }
+  },
 
   refinedSearch(track, artist) {
     let url = `https://api.spotify.com/v1/search?q=track:${track}+artist:${artist}&type=track`;
@@ -40,13 +40,13 @@ const Spotify = {
     return fetch(url, {
       method: "GET",
       headers: { Authorization: "Bearer " + accessToken }
-  ***REMOVED***)
+    })
       .then(response => {
         if (response.ok) {
           return response.json();
-  ***REMOVED***
+        }
         throw new Error("Connection failed!");
-***REMOVED***)
+      })
       .then(respJson => {
         if (!respJson || !respJson.tracks) return undefined;
         return respJson.tracks.items.map(track => {
@@ -56,10 +56,10 @@ const Spotify = {
             artist: track.artists[0].name,
             album: track.album.name,
             uri: track.uri
-    ***REMOVED***;
-  ***REMOVED***);
-***REMOVED***);
-***REMOVED***,
+          };
+        });
+      });
+  },
 
   search(term) {
     let url =
@@ -70,13 +70,13 @@ const Spotify = {
     return fetch(url, {
       method: "GET",
       headers: { Authorization: "Bearer " + accessToken }
-  ***REMOVED***)
+    })
       .then(response => {
         if (response.ok) {
           return response.json();
-  ***REMOVED***
+        }
         throw new Error("Connection failed!");
-***REMOVED***)
+      })
       .then(respJson => {
         if (!respJson || !respJson.tracks) return undefined;
         return respJson.tracks.items.map(track => {
@@ -86,10 +86,10 @@ const Spotify = {
             artist: track.artists[0].name,
             album: track.album.name,
             uri: track.uri
-    ***REMOVED***;
-  ***REMOVED***);
-***REMOVED***);
-***REMOVED***,
+          };
+        });
+      });
+  },
 
   savePlaylist(playlistName, trackUri) {
     if (!(playlistName && trackUri.length > 0)) return;
@@ -101,18 +101,18 @@ const Spotify = {
         headers: {
           Authorization: "Bearer " + accessToken,
           "Content-Type": "application/json"
-  ***REMOVED***,
+        },
         body: JSON.stringify({
           name: playlistName,
           public: "true"
-  ***REMOVED***)
-***REMOVED***)
+        })
+      })
         .then(response => {
           if (response.ok) {
             return response.json();
-    ***REMOVED***
+          }
           throw new Error("Failure retrieving Spotify-playlistId");
-  ***REMOVED***)
+        })
         .then(respJson => {
           let limit = 100;
           playlistID = respJson.id;
@@ -129,34 +129,34 @@ const Spotify = {
                 headers: {
                   Authorization: "Bearer " + accessToken,
                   "Content-Type": "application/json"
-          ***REMOVED***,
+                },
                 body: JSON.stringify({
                   uris: trackUri.slice(offset, offset + limit)
-          ***REMOVED***)
-        ***REMOVED***
+                })
+              }
             );
-    ***REMOVED***
-  ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***,
+          }
+        });
+    });
+  },
 
   getUserId() {
     if (!userId) {
       return fetch("https://api.spotify.com/v1/me", {
         method: "GET",
         headers: { Authorization: "Bearer " + accessToken }
-***REMOVED***)
+      })
         .then(response => {
           if (response.ok) {
             return response.json();
-    ***REMOVED***
+          }
           throw new Error("Failure retrieving Spotify-userId"); //TODO: What good are uncaught exceptions???
-  ***REMOVED***)
+        })
         .then(respJson => (userId = respJson.id));
-  ***REMOVED*** else {
+    } else {
       return Promise.resolve("Success");
-  ***REMOVED***
-***REMOVED***,
+    }
+  },
 
   getPlaylists() {
     return Spotify.getUserId().then(() => {
@@ -164,23 +164,23 @@ const Spotify = {
       return fetch(url, {
         method: "GET",
         headers: { Authorization: "Bearer " + accessToken }
-***REMOVED***)
+      })
         .then(response => {
           if (response.ok) {
             return response.json();
-    ***REMOVED***
+          }
           throw new Error("Failure retrieving Spotify playlists"); //TODO: What good are uncaught exceptions???
-  ***REMOVED***)
+        })
         .then(respJson => {
           return respJson.items.map(playList => {
             return {
               identifier: playList.id,
               name: playList.name
-      ***REMOVED***;
-    ***REMOVED***);
-  ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***,
+            };
+          });
+        });
+    });
+  },
 
   getNumberOfTracksInPlaylist(playlistId) {
     return Spotify.getUserId().then(() => {
@@ -189,18 +189,18 @@ const Spotify = {
       return fetch(url, {
         method: "GET",
         headers: { Authorization: "Bearer " + accessToken }
-***REMOVED***)
+      })
         .then(response => {
           if (response.ok) {
             return response.json();
-    ***REMOVED***
+          }
           throw new Error("Failure retrieving songs from Spotify playlist"); //TODO: What good are uncaught exceptions???
-  ***REMOVED***)
+        })
         .then(respJson => {
           return respJson.total;
-  ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***,
+        });
+    });
+  },
 
   getPlaylistTracks(playlistId) {
     return Spotify.getUserId().then(() => {
@@ -215,15 +215,15 @@ const Spotify = {
               fetch(url, {
                 method: "GET",
                 headers: { Authorization: "Bearer " + accessToken }
-        ***REMOVED***)
+              })
                 .then(response => {
                   if (response.ok) {
                     return response.json();
-            ***REMOVED***
+                  }
                   throw new Error(
                     "Failure retrieving songs from Spotify playlist"
                   ); //TODO: What good are uncaught exceptions???
-          ***REMOVED***)
+                })
                 .then(respJson => {
                   return respJson.items.map(element => {
                     return {
@@ -232,18 +232,18 @@ const Spotify = {
                       artist: element.track.artists[0].name,
                       album: element.track.album.name,
                       uri: element.track.uri
-              ***REMOVED***;
-            ***REMOVED***);
-          ***REMOVED***)
+                    };
+                  });
+                })
             );
-    ***REMOVED***
+          }
           return Promise.all(playListPages);
-  ***REMOVED***)
+        })
         .then(playListPages => {
           return [].concat.apply([], playListPages);
-  ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***
-***REMOVED***
+        });
+    });
+  }
+};
 
 export default Spotify;

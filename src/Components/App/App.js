@@ -16,7 +16,7 @@ class App extends React.Component {
       searchResults: [],
       playlistTracks: [],
       playlistName: "New Playlist"
-  ***REMOVED***;
+    };
     this.addTrack = this.addTrack.bind(this);
     this.removeTrack = this.removeTrack.bind(this);
     this.updatePlaylistName = this.updatePlaylistName.bind(this);
@@ -26,8 +26,8 @@ class App extends React.Component {
     this.destService = new MusicService("Deezer");
     this.musicService.init().then(response => {
       if (response === "Successful") this.destService.init();
-  ***REMOVED***);
-***REMOVED***
+    });
+  }
 
   search(searchTerm) {
     //GoogleMusic.init();
@@ -46,19 +46,19 @@ class App extends React.Component {
           ).then(matchedPlaylistTracks => {
             console.log(matchedPlaylistTracks);
             this.destService.savePlaylist("NeuesDing2", matchedPlaylistTracks);
-    ***REMOVED***);
-  ***REMOVED***);
-  ***REMOVED***);
+          });
+        });
+    });
     this.musicService.search(searchTerm).then(results => {
       this.setState({
         searchResults: results
-***REMOVED***);
-  ***REMOVED***);
-***REMOVED***
+      });
+    });
+  }
 
   updatePlaylistName(playlistName) {
     this.setState({ playlistName: playlistName });
-***REMOVED***
+  }
 
   addTrack(trackInfo) {
     if (
@@ -68,9 +68,9 @@ class App extends React.Component {
     )
       return;
     this.setState(prevState => {
-      return { playlistTracks: [...prevState.playlistTracks, trackInfo] ***REMOVED***
-  ***REMOVED***);
-***REMOVED***
+      return { playlistTracks: [...prevState.playlistTracks, trackInfo] };
+    });
+  }
 
   removeTrack(trackInfo) {
     this.setState(prevState => {
@@ -78,9 +78,9 @@ class App extends React.Component {
         playlistTracks: prevState.playlistTracks.filter(
           tr => tr.id !== trackInfo.id
         )
-***REMOVED***;
-  ***REMOVED***);
-***REMOVED***
+      };
+    });
+  }
 
   savePlaylist() {
     this.musicService
@@ -89,9 +89,9 @@ class App extends React.Component {
         this.setState({
           playlistName: "New Playlist",
           playlistTracks: []
-  ***REMOVED***);
-***REMOVED***);
-***REMOVED***
+        });
+      });
+  }
 
   render() {
     return (
@@ -117,7 +117,7 @@ class App extends React.Component {
         </div>
       </div>
     );
-***REMOVED***
+  }
 }
 
 export default App;

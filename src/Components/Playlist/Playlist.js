@@ -7,11 +7,11 @@ class Playlist extends React.Component {
   constructor(props) {
     super(props);
     this.handleNameChange = this.handleNameChange.bind(this);
-***REMOVED***
+  }
 
   handleNameChange(event) {
     this.props.onNameChange(event.target.value);
-***REMOVED***
+  }
 
   render() {
     return (
@@ -30,7 +30,7 @@ class Playlist extends React.Component {
         </a>
       </div>
     );
-***REMOVED***
+  }
 }
 
 Playlist.propTypes = {
@@ -39,6 +39,6 @@ Playlist.propTypes = {
   trackInfos: PropTypes.array,
   onRemove: PropTypes.func,
   onSave: PropTypes.func
-***REMOVED***
+};
 
 export default Playlist;

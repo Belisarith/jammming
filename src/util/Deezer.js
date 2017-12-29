@@ -7,15 +7,15 @@ let appId = "265642";
 let userId = "";
 
 const Deezer = {
-***REMOVED***
+  init() {
     return Deezer.getAccessToken();
-***REMOVED***,
+  },
 
   getAccessToken() {
     if (sessionStorage.getItem("DeezerToken")) {
       accessToken = sessionStorage.getItem("DeezerToken");
       return Promise.resolve("Successful");
-  ***REMOVED***
+    }
 
     let url = `https://connect.deezer.com/oauth/auth.php?app_id=${appId}&redirect_uri=${redirectUri}&perms=manage_library&response_type=token`;
 
@@ -29,12 +29,12 @@ const Deezer = {
       window.setTimeout(() => {
         sessionStorage.setItem("DeezerToken", "");
         accessToken = "";
-***REMOVED***, expiresIn * 1000);
+      }, expiresIn * 1000);
       window.location.replace(redirectUri);
-  ***REMOVED*** else {
+    } else {
       window.location.replace(url);
-  ***REMOVED***
-***REMOVED***,
+    }
+  },
 
   search(term) {
     let url = `https://api.deezer.com/search?q=track:"${term}"&output=jsonp`;
@@ -42,9 +42,9 @@ const Deezer = {
       .then(response => {
         if (response.ok) {
           return response.json();
-  ***REMOVED***
+        }
         throw new Error("Failure searching deezer");
-***REMOVED***)
+      })
       .then(respJson => {
         if (!respJson || !respJson.data) return undefined;
         return respJson.data.map(track => {
@@ -54,10 +54,10 @@ const Deezer = {
             artist: track.artist.name,
             album: track.album.title,
             uri: track.link
-    ***REMOVED***;
-  ***REMOVED***);
-***REMOVED***);
-***REMOVED***,
+          };
+        });
+      });
+  },
 
   refinedSearch(track, artist) {
     let url = `https://api.deezer.com/search?q=track:"${track}" artist:"${artist}"&output=jsonp`;
@@ -65,9 +65,9 @@ const Deezer = {
       .then(response => {
         if (response.ok) {
           return response.json();
-  ***REMOVED***
+        }
         throw new Error("Failure searching deezer");
-***REMOVED***)
+      })
       .then(respJson => {
         if (!respJson || !respJson.data) return undefined;
         return respJson.data.map(track => {
@@ -77,10 +77,10 @@ const Deezer = {
             artist: track.artist.name,
             album: track.album.title,
             uri: track.link
-    ***REMOVED***;
-  ***REMOVED***);
-***REMOVED***);
-***REMOVED***,
+          };
+        });
+      });
+  },
 
   savePlaylist(playlistName, trackId) {
     if (!(playlistName && trackId.length > 0)) return;
@@ -93,9 +93,9 @@ const Deezer = {
         .then(response => {
           if (response.ok) {
             return response.json();
-    ***REMOVED***
+          }
           throw new Error("Failure creating playlist deezer");
-  ***REMOVED***)
+        })
         .then(respJson => {
           let limit = 50;
           playlistId = respJson.id;
@@ -112,14 +112,14 @@ const Deezer = {
               .then(response => {
                 if (response.ok) {
                   return response.json();
-          ***REMOVED***
+                }
                 throw new Error("Failure adding songs deezer");
-        ***REMOVED***)
+              })
               .then(respJson => console.log(respJson));
-    ***REMOVED***
-  ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***,
+          }
+        });
+    });
+  },
 
   getUserId() {
     let url =
@@ -130,16 +130,16 @@ const Deezer = {
         .then(response => {
           if (response.ok) {
             return response.json();
-    ***REMOVED***
+          }
           throw new Error("Failure accessing userid deezer");
-  ***REMOVED***)
+        })
         .then(respJson => {
           userId = respJson.id;
-  ***REMOVED***);
-  ***REMOVED*** else {
+        });
+    } else {
       return Promise.resolve("Success");
-  ***REMOVED***
-***REMOVED***,
+    }
+  },
 
   getPlaylists() {
     return Deezer.getUserId().then(() => {
@@ -148,19 +148,19 @@ const Deezer = {
         .then(response => {
           if (response.ok) {
             return response.json();
-    ***REMOVED***
+          }
           throw new Error("Failure accessing playlists in deezer");
-  ***REMOVED***)
+        })
         .then(respJson => {
           return respJson.data.map(element => {
             return {
               identifier: element.id,
               name: element.title
-      ***REMOVED***;
-    ***REMOVED***);
-  ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***,
+            };
+          });
+        });
+    });
+  },
 
   getNumberOfTracksInPlaylist(playlistId) {
     let url = `https://api.deezer.com/playlist/${playlistId}/tracks&output=jsonp&access_token=${accessToken}`;
@@ -169,13 +169,13 @@ const Deezer = {
       .then(response => {
         if (response.ok) {
           return response.json();
-  ***REMOVED***
+        }
         throw new Error("Failure accessing playlist tracks in deezer");
-***REMOVED***)
+      })
       .then(respJson => {
         return respJson.total;
-***REMOVED***);
-***REMOVED***,
+      });
+  },
 
   getPlaylistTracks(playlistId) {
     return Deezer.getUserId()
@@ -192,11 +192,11 @@ const Deezer = {
                 .then(response => {
                   if (response.ok) {
                     return response.json();
-            ***REMOVED***
+                  }
                   throw new Error(
                     "Failure accessing playlist tracks in deezer"
                   );
-          ***REMOVED***)
+                })
                 .then(respJson => {
                   return respJson.data.map(element => {
                     return {
@@ -205,18 +205,18 @@ const Deezer = {
                       artist: element.artist.name,
                       album: element.album.title,
                       uri: element.link
-              ***REMOVED***;
-            ***REMOVED***);
-          ***REMOVED***)
+                    };
+                  });
+                })
             );
-    ***REMOVED***
+          }
           return Promise.all(playListPages);
-  ***REMOVED***);
-***REMOVED***)
+        });
+      })
       .then(playListPages => {
         return [].concat.apply([], playListPages);
-***REMOVED***);
-***REMOVED***
-***REMOVED***
+      });
+  }
+};
 
 export default Deezer;

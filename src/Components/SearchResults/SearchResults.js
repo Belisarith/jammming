@@ -15,13 +15,13 @@ class SearchResults extends React.Component {
         />
       </div>
     );
-***REMOVED***
+  }
 }
 
 SearchResults.propTypes = {
   trackInfos: PropTypes.array,
   isRemoval: PropTypes.bool,
   onAdd: PropTypes.func
-***REMOVED***
+};
 
 export default SearchResults;
