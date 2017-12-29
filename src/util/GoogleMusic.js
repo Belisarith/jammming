@@ -3,9 +3,9 @@
 const GoogleMusic = {
   init() {
     //let pm = new PlayMusic();
-    // pm.login({ email: "jfohnek@googlemail.com", password: "test" }, function(err,rsp) {});
+    // pm.login({ email: "test@googlemail.com", password: "test" }, function(err,rsp) {});
     /*pm.login(
-      { email: "jfohnek@googlemail.com", password: "Ka8ofTal82?GO?!" },
+      { email: "test@googlemail.com", password: "test" },
       function(err) {
         console.log("Hello");
       }
