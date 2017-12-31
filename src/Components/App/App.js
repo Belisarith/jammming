@@ -35,9 +35,9 @@ class App extends React.Component {
       console.log(playlists);
 
       this.musicService
-        .getPlaylistTracks(playlists[5].identifier)
+        .getPlaylistTracks(playlists[0].identifier)
         .then(playListTracks => {
-          console.log(playlists[5].name);
+          console.log(playlists[0].name);
           console.log(playListTracks);
 
           PlaylistConverter.convertPlaylist(
@@ -45,7 +45,7 @@ class App extends React.Component {
             this.destService
           ).then(matchedPlaylistTracks => {
             console.log(matchedPlaylistTracks);
-            this.destService.savePlaylist("NeuesDing2", matchedPlaylistTracks);
+            this.destService.savePlaylist("new one", matchedPlaylistTracks);
           });
         });
     });

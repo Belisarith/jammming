@@ -42,6 +42,7 @@ const Deezer = {
       .then(response => {
         if (response.ok) {
           return response.json();
+          console.log(response);
         }
         throw new Error("Failure searching deezer");
       })
@@ -69,6 +70,7 @@ const Deezer = {
         throw new Error("Failure searching deezer");
       })
       .then(respJson => {
+        console.log(respJson);
         if (!respJson || !respJson.data) return undefined;
         return respJson.data.map(track => {
           return {
@@ -97,7 +99,7 @@ const Deezer = {
           throw new Error("Failure creating playlist deezer");
         })
         .then(respJson => {
-          let limit = 50;
+          let limit = 10;
           playlistId = respJson.id;
           for (
             let offset = 0;
