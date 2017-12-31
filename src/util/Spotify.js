@@ -1,4 +1,6 @@
 import { redirectUri } from "./Constants.js";
+import sleep from "sleep-promise";
+
 let accessToken = "";
 let expiresIn = "";
 let userId = "";
@@ -35,7 +37,8 @@ const Spotify = {
   },
 
   refinedSearch(track, artist) {
-    let url = `https://api.spotify.com/v1/search?q=track:${track}+artist:${artist}&type=track`;
+    track = track.replace("&", "and");
+    let url = `https://api.spotify.com/v1/search?q=track:${track}+artist:${artist}&type=track&offset=0&limit=25`;
 
     return fetch(url, {
       method: "GET",
@@ -94,6 +97,9 @@ const Spotify = {
   savePlaylist(playlistName, trackUri) {
     if (!(playlistName && trackUri.length > 0)) return;
     let playlistID = "";
+    let limit = 100;
+
+    trackUri = [...new Set(trackUri)];
 
     return Spotify.getUserId().then(() => {
       fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
@@ -114,28 +120,34 @@ const Spotify = {
           throw new Error("Failure retrieving Spotify-playlistId");
         })
         .then(respJson => {
-          let limit = 100;
           playlistID = respJson.id;
 
-          for (
-            let offset = 0;
-            offset <= trackUri.length - 1;
-            offset = offset + limit
-          ) {
-            fetch(
-              `https://api.spotify.com/v1/users/${userId}/playlists/${playlistID}/tracks`,
-              {
-                method: "POST",
-                headers: {
-                  Authorization: "Bearer " + accessToken,
-                  "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                  uris: trackUri.slice(offset, offset + limit)
-                })
-              }
+          let nestedTrackUris = trackUri.reduce(function(rows, key, index) {
+            return (
+              (index % limit === 0
+                ? rows.push([key])
+                : rows[rows.length - 1].push(key)) && rows
             );
-          }
+          }, []);
+
+          return nestedTrackUris.reduce((chain, chunk) => {
+            return chain.then(sleep(100)).then(() => {
+              console.log(chunk);
+              return fetch(
+                `https://api.spotify.com/v1/users/${userId}/playlists/${playlistID}/tracks`,
+                {
+                  method: "POST",
+                  headers: {
+                    Authorization: "Bearer " + accessToken,
+                    "Content-Type": "application/json"
+                  },
+                  body: JSON.stringify({
+                    uris: chunk
+                  })
+                }
+              );
+            });
+          }, Promise.resolve());
         });
     });
   },

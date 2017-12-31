@@ -1,5 +1,6 @@
 import { redirectUri } from "./Constants.js";
 import fetchJsonp from "fetch-jsonp";
+import sleep from "sleep-promise";
 
 let accessToken = "";
 let expiresIn;
@@ -42,7 +43,6 @@ const Deezer = {
       .then(response => {
         if (response.ok) {
           return response.json();
-          console.log(response);
         }
         throw new Error("Failure searching deezer");
       })
@@ -61,7 +61,8 @@ const Deezer = {
   },
 
   refinedSearch(track, artist) {
-    let url = `https://api.deezer.com/search?q=track:"${track}" artist:"${artist}"&output=jsonp`;
+    track = track.replace("&", "and");
+    let url = `https://api.deezer.com/search?q=track:"${track}" artist:"${artist}"&output=jsonp&index=0&limit=100`;
     return fetchJsonp(url)
       .then(response => {
         if (response.ok) {
@@ -87,8 +88,11 @@ const Deezer = {
   savePlaylist(playlistName, trackId) {
     if (!(playlistName && trackId.length > 0)) return;
     let playlistId = "";
-
+    let limit = 100;
     let url;
+
+    trackId = [...new Set(trackId)];
+
     return Deezer.getUserId().then(() => {
       url = `https://api.deezer.com/user/${userId}/playlists/&output=jsonp&request_method=post&access_token=${accessToken}&title=${playlistName}`;
       fetchJsonp(url)
@@ -99,26 +103,34 @@ const Deezer = {
           throw new Error("Failure creating playlist deezer");
         })
         .then(respJson => {
-          let limit = 10;
           playlistId = respJson.id;
-          for (
-            let offset = 0;
-            offset <= trackId.length - 1;
-            offset = offset + limit
-          ) {
-            url = `http://api.deezer.com/playlist/${playlistId}/tracks/&output=jsonp&access_token=${accessToken}&songs=${trackId
-              .slice(offset, offset + limit)
-              .join()}&request_method=post`;
-            console.log(url);
-            fetchJsonp(url)
-              .then(response => {
-                if (response.ok) {
-                  return response.json();
-                }
-                throw new Error("Failure adding songs deezer");
+          let nestedTrackIds = trackId.reduce(function(rows, key, index) {
+            return (
+              (index % limit === 0
+                ? rows.push([key])
+                : rows[rows.length - 1].push(key)) && rows
+            );
+          }, []);
+
+          console.log(nestedTrackIds);
+
+          return nestedTrackIds.reduce((chain, chunk) => {
+            return chain
+              .then(sleep(100))
+              .then(() => {
+                console.log(chunk);
+                let url = `http://api.deezer.com/playlist/${playlistId}/tracks/&output=jsonp&access_token=${accessToken}&songs=${chunk.join()}&request_method=post`;
+                console.log(url);
+                return fetchJsonp(url).then(response => {
+                  if (response.ok) {
+                    console.log(response);
+                    return response.json();
+                  }
+                  throw new Error("Failure adding songs deezer");
+                });
               })
-              .then(respJson => console.log(respJson));
-          }
+              .then(console.log(respJson));
+          }, Promise.resolve());
         });
     });
   },
